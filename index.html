@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bina Binary</title>
+<style>
+:root{--bg:#120f1f;--bg2:#1a1530;--card:#1e1838;--line:#2d2650;--tx:#f2f0fa;--mu:#8a84a8;--pu:#7c3aed;--gr:#22c55e;--rd:#ff4757;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark}}
+*{box-sizing:border-box;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);max-width:480px;margin:0 auto;min-height:100vh;font-size:14px}
+button{border:0;color:inherit;background:none;cursor:pointer}
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border-bottom:1px solid var(--line)}
+.av{width:38px;height:38px;border-radius:10px;background:var(--pu);display:grid;place-items:center;font-weight:700}
+.bal{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:7px 12px;font-weight:700;font-size:15px}
+.bal i{font-style:normal;width:30px;height:30px;border-radius:8px;background:var(--rd);display:grid;place-items:center;font-size:13px}
+.dep{background:var(--pu);padding:11px 14px;border-radius:10px;font-weight:700;box-shadow:0 0 14px #7c3aed66}
+.tabs{display:flex;padding:10px 12px;background:var(--bg2);gap:4px;overflow-x:auto}
+.tabs button{padding:12px 16px;border-radius:12px;color:var(--mu);font-size:15px;white-space:nowrap}
+.tabs .on{background:var(--card);color:var(--tx);font-weight:600;border:1px solid var(--line)}
+.chart{position:relative;height:340px;background:#14111f;border-bottom:1px solid var(--line)}
+canvas{width:100%;height:100%;display:block}
+.sym{position:absolute;left:12px;top:12px;background:#1b1730cc;border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.sym b{display:block;font-size:15px}.sym span{color:var(--mu)}.sym em{color:var(--gr);font-style:normal;font-size:12px;margin-left:6px}
+.digs{display:flex;justify-content:space-between;padding:16px 10px 14px;background:var(--bg2)}
+.d{width:32px;text-align:center;position:relative}
+.d svg{width:32px;height:32px;display:block}
+.d small{display:block;font-size:9px;color:var(--mu);margin-top:-23px;height:23px;line-height:23px}
+.d b{display:block;font-size:12px;margin-top:-8px;height:0}
+.d .mk{height:12px;color:#f59e0b;font-size:10px;margin-top:12px}
+.panel{padding:14px 14px 90px}
+.seg{display:flex;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:16px}
+.seg button{flex:1;padding:11px;font-weight:700;font-size:12px;letter-spacing:1px;color:var(--mu)}
+.seg .on{background:var(--pu);color:#fff}
+.stake{display:flex;gap:10px;align-items:center}
+.stake .pm{width:54px;height:54px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:24px;color:var(--mu)}
+.stake .box{flex:1;border:2px solid var(--pu);border-radius:14px;background:#1c1536;text-align:center;padding:8px;position:relative}
+.box label{font-size:10px;letter-spacing:1px;color:var(--pu);font-weight:700;display:block}
+.box input{width:100%;background:none;border:0;color:var(--tx);text-align:center;font-size:24px;font-weight:700;outline:0}
+.box u{position:absolute;left:14px;bottom:14px;color:var(--pu);text-decoration:none;font-weight:700}
+.chips{display:flex;gap:7px;margin:12px 0}
+.chips button{flex:1;padding:11px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--mu);font-weight:600;font-size:13px}
+.chips .on{background:#2a1f55;border-color:var(--pu);color:var(--tx)}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.f label{display:block;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:6px}
+.f input{width:100%;background:none;border:0;color:var(--tx);font-size:16px;font-weight:600;text-align:center;outline:0}
+.last{display:flex;justify-content:space-between;margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px;font-size:13px;color:var(--mu)}
+.last b{font-size:17px}
+.pick{display:flex;gap:7px;margin-bottom:12px}
+.pick button{flex:1;padding:12px 0;background:var(--card);border-radius:8px;color:var(--mu);font-weight:600}
+.pick .on{background:var(--pu);color:#fff}
+.act{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.act button{border-radius:16px;padding:16px;text-align:left;font-weight:700;font-size:19px;position:relative;min-height:90px;color:#fff}
+.act small{display:block;font-weight:500;font-size:13px;opacity:.9;margin-top:4px}
+.act s{position:absolute;right:14px;top:16px;text-decoration:none;font-size:14px}
+.act s i{display:block;font-style:normal;font-size:11px;font-weight:400;text-align:right;opacity:.85}
+.m{background:var(--gr)}.df{background:var(--rd)}
+.act button:active{transform:scale(.98)}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;justify-content:space-around;align-items:flex-end;background:var(--bg2);border-top:1px solid var(--line);padding:10px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+nav div{text-align:center;color:var(--mu);font-size:13px;width:80px}
+nav .on{color:var(--pu)}
+nav .ai{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,#f59e0b,#ec4899,#7c3aed);margin:-30px auto 4px;display:grid;place-items:center;font-size:26px;box-shadow:0 4px 18px #ec489955}
+#toast{position:fixed;top:70px;left:50%;transform:translate(-50%,-30px);opacity:0;padding:12px 20px;border-radius:12px;font-weight:700;transition:.25s;z-index:9}
+#toast.s{opacity:1;transform:translate(-50%,0)}
+.demo{font-size:11px;text-align:center;color:var(--mu);padding:8px}
+</style></head><body>
+<div style="text-align:center;padding:10px;background:var(--bg2);font-weight:800;letter-spacing:.5px;font-size:17px">Bina <span style="color:var(--pu)">Binary</span> <span style="font-size:10px;background:#2a1f55;border-radius:6px;padding:2px 6px;vertical-align:middle">DEMO</span></div><div class="top"><div class="av">B</div><div class="bal"><i>D</i><span id="bal"></span></div><button class="dep" onclick="dm(1)">Deposit</button></div>
+<div class="tabs"><button class="on">◎ Matches/Differs</button><button>▦ Even/Odd</button><button>⇅ Over/Under</button></div>
+<div class="chart"><canvas id="cv"></canvas><div class="sym"><b>Vol 10 (1s)</b><span id="px"></span><em id="chg"></em></div></div>
+<div class="digs" id="digs"></div>
+<div class="panel">
+<div class="seg"><button class="on" id="ba" onclick="mode(1)">AUTO</button><button id="bm" onclick="mode(0)">MANUAL</button></div>
+<div class="stake"><button class="pm" onclick="st(-1)">−</button><div class="box"><label>STAKE</label><u>$</u><input id="stake" type="number" value="10" oninput="pay()"></div><button class="pm" onclick="st(1)">+</button></div>
+<div class="chips" id="chips"></div>
+<div class="row3" id="auto">
+<div class="f"><label style="color:var(--gr)">TARGET PROFIT</label><input value="200"></div>
+<div class="f"><label style="color:var(--rd)">STOP LOSS</label><input value="999"></div>
+<div class="f"><label style="color:#f59e0b">MULTIPLIER</label><input value="2"></div></div>
+<div class="last"><span>LAST &nbsp; <span id="lt">0T · 0W · 0L</span></span><b id="lp" style="color:var(--gr)">+$0.00</b></div>
+<div class="pick" id="pick"></div>
+<div class="act">
+<button class="m" onclick="trade('m')">Match <span id="lm">9</span><s><span id="pm">$95.00</span><i>Payout</i></s><small>850%</small></button>
+<button class="df" onclick="trade('d')">Differ <span id="ld">9</span><s><span id="pd">$10.56</span><i>Payout</i></s><small>5.6%</small></button></div>
+<div class="demo">Simulated demo with virtual money — not a real trading platform.</div>
+</div>
+<nav><div class="on">▮▮▮<br>Trade</div><div><div class="ai">✦</div><span style="color:#ec4899;font-weight:700;font-size:12px">AI</span></div><div>◷<br>Positions</div></nav>
+<div id="dm" style="display:none;position:fixed;inset:0;background:#000a;z-index:20;align-items:center;justify-content:center"><div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;width:88%;max-width:360px"><b style="font-size:17px">Add demo funds</b><p style="color:var(--mu);font-size:12px;margin:6px 0 12px">Virtual money only. Minimum deposit $5.</p><div class="f"><label style="color:var(--pu)">AMOUNT (USD)</label><input id="da" type="number" value="5"></div><div id="de" style="color:var(--rd);font-size:12px;height:16px;margin:6px 0"></div><div style="display:flex;gap:8px"><button onclick="dm(0)" style="flex:1;padding:12px;border-radius:10px;background:var(--bg2);color:var(--mu);font-weight:600">Cancel</button><button onclick="dok()" style="flex:1;padding:12px;border-radius:10px;background:var(--pu);font-weight:700">Deposit</button></div><button onclick="bal=10000;ups();dm(0)" style="display:block;margin:12px auto 0;color:var(--mu);font-size:12px;text-decoration:underline">Reset balance to $10,000</button></div></div>
+<div id="toast"></div>
+<script>
+let bal=10000,sel=9,pnl=0,T=0,W=0,L=0,price=9576.91,open=price,ticks=[],hist=[],pend=null;
+const $=id=>document.getElementById(id),cv=$('cv'),cx=cv.getContext('2d');
+const f2=n=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function ups(){$('bal').textContent='$ '+f2(bal)}
+function pay(){const s=+$('stake').value||0;$('pm').textContent='$'+f2(s*9.5);$('pd').textContent='$'+f2(s*1.056)}
+function st(d){$('stake').value=Math.max(1,(+$('stake').value||0)+d);pay();chipsOn()}
+function chipsOn(){[...$('chips').children].forEach(b=>b.classList.toggle('on',+b.dataset.v==+$('stake').value))}
+[1,5,10,25,50,100].forEach(v=>{const b=document.createElement('button');b.textContent='$'+v;b.dataset.v=v;b.onclick=()=>{$('stake').value=v;pay();chipsOn()};$('chips').appendChild(b)});
+for(let i=0;i<10;i++){const b=document.createElement('button');b.textContent=i;b.onclick=()=>{sel=i;pk()};$('pick').appendChild(b)}
+function pk(){[...$('pick').children].forEach((b,i)=>b.classList.toggle('on',i==sel));document.querySelectorAll('.d').forEach((e,i)=>{e.style.background=i==sel?'#2a1f55':'';e.style.borderRadius='12px'});$('lm').textContent=sel;$('ld').textContent=sel}
+function mode(a){$('ba').classList.toggle('on',a);$('bm').classList.toggle('on',!a);$('auto').style.display=a?'grid':'none'}
+// digits
+const dg=$('digs');for(let i=0;i<10;i++){dg.insertAdjacentHTML('beforeend',`<div class="d" onclick="sel=${i};pk()" style="cursor:pointer"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#2d2650" stroke-width="2.5"/><circle id="r${i}" cx="16" cy="16" r="14" fill="none" stroke="#8a84a8" stroke-width="2.5" stroke-dasharray="88" stroke-dashoffset="70" transform="rotate(-90 16 16)"/></svg><small id="n${i}" style="font-size:13px;font-weight:700;color:#f2f0fa;margin-top:-30px;height:15px;line-height:15px">${i}</small><b id="p${i}" style="color:var(--mu);font-size:9px;margin-top:3px;height:auto;font-weight:400"></b><div class="mk" id="k${i}"></div></div>`)}
+function drawDigits(){const c=Array(10).fill(0);hist.forEach(d=>c[d]++);const n=hist.length||1;
+const pc=c.map(x=>x/n*100),mx=Math.max(...pc),mn=Math.min(...pc);
+pc.forEach((p,i)=>{const col=p==mx?'#22c55e':p==mn?'#ff4757':'#8a84a8';$('r'+i).setAttribute('stroke',col);$('r'+i).setAttribute('stroke-dashoffset',88-Math.min(1,p/20)*88*.6);$('p'+i).textContent=p.toFixed(1)+'%';$('p'+i).style.color=col;$('k'+i).textContent=hist[hist.length-1]==i?'▼':''})}
+// chart
+function draw(){const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;cx.scale(dpr,dpr);
+const w=r.width,h=r.height,pw=70,cw=w-pw,pts=ticks.slice(-40);if(pts.length<2)return;
+let mn=Math.min(...pts),mx=Math.max(...pts);const pad=(mx-mn)*.15||1;mn-=pad;mx+=pad;
+const X=i=>i/(39)*cw,Y=v=>20+(1-(v-mn)/(mx-mn))*(h-60);
+cx.strokeStyle='#241e3d';cx.fillStyle='#8a84a8';cx.font='12px system-ui';cx.lineWidth=1;
+for(let i=0;i<6;i++){const y=30+i*(h-80)/5;cx.beginPath();cx.moveTo(0,y);cx.lineTo(cw,y);cx.stroke();cx.fillText((mx-(mx-mn)*(y-20)/(h-60)).toFixed(2),cw+6,y+4)}
+const off=40-pts.length;
+cx.beginPath();pts.forEach((v,i)=>{const x=X(i+off),y=Y(v);i?cx.lineTo(x,y):cx.moveTo(x,y)});
+cx.strokeStyle='#fff';cx.lineWidth=2;cx.lineJoin='round';cx.stroke();
+cx.lineTo(X(39),h-30);cx.lineTo(X(off),h-30);const g=cx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#ffffff22');g.addColorStop(1,'#ffffff00');cx.fillStyle=g;cx.fill();
+const ly=Y(pts[pts.length-1]);cx.fillStyle='#fff';cx.beginPath();cx.arc(X(39),ly,4,0,7);cx.fill();
+cx.fillStyle='#14111f';cx.strokeStyle='#5eead4';cx.lineWidth=1.5;cx.beginPath();cx.roundRect(cw-10,ly-14,pw+4,28,6);cx.fill();cx.stroke();
+cx.fillStyle='#fff';cx.font='bold 13px system-ui';cx.fillText(price.toFixed(2),cw-2,ly+5);
+cx.fillStyle='#8a84a8';cx.font='12px system-ui';const now=Date.now();
+for(let i=0;i<4;i++){const t=new Date(now-(3-i)*5000);cx.fillText(t.toTimeString().slice(0,8),10+i*(cw/4),h-8)}}
+function dm(o){$('dm').style.display=o?'flex':'none';$('de').textContent=''}
+function dok(){const a=+$('da').value;if(!(a>=5)){$('de').textContent='Minimum deposit is $5.00';return}bal+=a;ups();dm(0);toast('Added $'+f2(a)+' demo funds','#16a34a')}
+function toast(t,c){const e=$('toast');e.textContent=t;e.style.background=c;e.classList.add('s');setTimeout(()=>e.classList.remove('s'),1800)}
+function trade(k){const s=+$('stake').value;if(!s||s>bal||pend)return toast('Check your stake','#7c3aed');bal-=s;ups();pend={k,s,d:sel}}
+function resolve(d){if(!pend)return;const{k,s,d:p}=pend;pend=null;const win=k=='m'?d==p:d!=p;
+const ret=win?s*(k=='m'?9.5:1.056):0;bal+=ret;const net=ret-s;pnl+=net;T++;win?W++:L++;
+$('lt').textContent=`${T}T · ${W}W · ${L}L`;$('lp').textContent=(pnl>=0?'+':'-')+'$'+f2(Math.abs(pnl));$('lp').style.color=pnl>=0?'var(--gr)':'var(--rd)';
+ups();toast(win?`Won +$${f2(net)} (digit ${d})`:`Lost -$${f2(s)} (digit ${d})`,win?'#16a34a':'#e11d48')}
+function tick(){const nx=Math.max(9000,price+(Math.random()-.5)*7-0.3);price=Math.round(nx*100)/100;ticks.push(price);if(ticks.length>200)ticks.shift();
+const d=Math.round(price*100)%10;hist.push(d);if(hist.length>1000)hist.shift();
+$('px').textContent=price.toFixed(2);const c=(price-open)/open*100;$('chg').textContent=(c>=0?'+':'')+c.toFixed(2)+'%';$('chg').style.color=c>=0?'var(--gr)':'var(--rd)';
+resolve(d);drawDigits();draw()}
+for(let i=0;i<60;i++){price=Math.round(Math.max(9000,price+(Math.random()-.5)*7-0.3)*100)/100;ticks.push(price);hist.push(Math.round(price*100)%10)}
+ups();pay();pk();chipsOn();tick();setInterval(tick,1000);addEventListener('resize',draw);
+</script></body></html>
